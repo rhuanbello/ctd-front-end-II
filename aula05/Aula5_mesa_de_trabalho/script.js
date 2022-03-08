@@ -1,5 +1,5 @@
-const toggleDarkMode = document.querySelector('.switch input');
 const listOfItems = document.querySelectorAll('.item');
+const toggleDarkMode = document.querySelector('.switch input');
 const header = document.querySelector('header');
 const h1 = document.querySelector('.content h1');
 
