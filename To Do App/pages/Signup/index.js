@@ -1,5 +1,5 @@
 const inputName = document.querySelector('.name');
-const inputNickname = document.querySelector('.nickname');
+const inputLastname = document.querySelector('.lastname');
 const inputEmail = document.querySelector('.email');
 const inputPassword = Array.from(document.querySelectorAll('input[type="password"]'));
 const button = document.querySelector('button');
@@ -8,41 +8,55 @@ const form = document.querySelector('form');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  console.log('validateName()', validateName())
-  console.log('validateNickname()', validateNickname())
+  console.log('validateName()', validateName(10))
+  console.log('validateLastname()', validateName(15))
   console.log('validateEmail()', validateEmail())
   console.log('validatePassword()', validatePassword())
-
-  if (validateName() && validateNickname() && validateEmail() && validatePassword()) {
-    goToHomePage();
+  // validateName() && validateEmail()
+  if (validatePassword()) {
+    postCreateUser2()
   }
+  // postCreateUser();
 })
 
-const validateName = () => {
-  const nameHasOnlyString = !/\d/g.test(inputName.value);
-  const nameHasTwoWords = inputName.value.split(' ').length === 2;
-  const firstName = inputName.value.split(' ')[0];
-  const lastName = inputName.value.split(' ')[1];
-  const maxLenght = 15;
+const postCreateUser2 = () => {
+  const baseURL = 'https://ctd-todo-api.herokuapp.com/v1'
+  const userObject = {
+    firstName: inputName.value.toString(),
+    lastName: inputLastname.value.toString(),
+    email: inputEmail.value.toString(),
+    password: inputPassword[0].value.toString()
+  }
 
-  const isNameValid = nameHasOnlyString &&
-    nameHasTwoWords &&
-    firstName.length < maxLenght &&
-    lastName.length < maxLenght;
+  fetch(baseURL + '/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userObject)
+  })
+   .then(response => {
+      return response.json()
+   })
+   .then(({ jwt }) => {
+      if (jwt) {
+        localStorage.setItem('jwt', JSON.stringify(jwt));
+      }
+   })
+   .catch(error => {
+     console.log(error)
+   })
 
-  return isNameValid
 }
 
-const validateNickname = () => {
-  const nicknameValidateSpecialString = !/\W/g.test(inputNickname.value);
-  const nicknameValidateMaxLenght = inputNickname.value.length < 15;
-  const nicknameValidateMinLenght = inputNickname.value.length > 3;
+const validateName = (maxLenght) => {
+  const nameValidateSpecialString = !/\W/g.test(inputLastname.value);
+  const nameHasOnlyString = !/\d/g.test(inputName.value);
 
-  const isNicknameValid = nicknameValidateSpecialString &&
-    nicknameValidateMaxLenght &&
-    nicknameValidateMinLenght;
+  const isNameValid = nameHasOnlyString && nameValidateSpecialString &&
+    nameHasOnlyString.length < maxLenght
 
-  return isNicknameValid
+  return isNameValid
 }
 
 const validateEmail = () => {
@@ -68,6 +82,32 @@ const validatePassword = () => {
 
   const isPasswordValid = isBothPasswordsEqual && isPasswordsMaxLength;
   return isPasswordValid;
+}
+
+const postCreateUser = () => {
+  const baseURL = 'https://ctd-todo-api.herokuapp.com/v1';
+
+  const userObject = {
+    firstName: inputName.value.toString(),
+    lastName: inputLastname.value.toString(),
+    email: inputEmail.value.toString(),
+    password: inputPassword[0].value.toString()
+  };
+
+  fetch(`${baseURL}/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userObject)
+  })
+    .then(response => {
+      return response.json()
+    })
+    .then(({ jwt }) => {
+      localStorage.setItem('token', JSON.stringify(jwt));
+    })
+    .catch((error) => console.log(error))
 }
 
 const goToHomePage = () => {

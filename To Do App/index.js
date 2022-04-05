@@ -2,8 +2,6 @@ const form = document.querySelector('form');
 const inputEmail = document.querySelector('input[type="text"]');
 const inputPassword = document.querySelector('input[type="password"]');
 
-const homePageURL = 'pages/Tarefas/index.html';
-
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -16,16 +14,40 @@ form.addEventListener('submit', (e) => {
     emailValue.slice(-4).includes('.com');
 
   if (isEmailValid) {
-    localStorage.setItem('userInfo', JSON.stringify({
-      email: emailValue,
-    }))
-    goToHomePage();
+    postUserLogin()
   } else {
     alert(`E-mail ${emailValue} inválido!`);
   }
 
 })
 
+const postUserLogin = () => {
+  const baseURL = 'https://ctd-todo-api.herokuapp.com/v1';
+
+  const userObject = {
+    email: inputEmail.value.toString(),
+    password: inputPassword.value.toString()
+  };
+
+  fetch(`${baseURL}/users/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userObject)
+  })
+    .then(response => {
+      return response.json()
+    })
+    .then(({ jwt }) => {
+      if (jwt) {
+        localStorage.setItem('token', JSON.stringify(jwt));
+        goToHomePage();
+      }
+    })
+    .catch((error) => console.log(error))
+}
+
 const goToHomePage = () => {
-  location.href = homePageURL;
+  location.href = 'pages/Tarefas/index.html';
 }
