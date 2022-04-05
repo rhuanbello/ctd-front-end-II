@@ -12,14 +12,13 @@ form.addEventListener('submit', (e) => {
   console.log('validateLastname()', validateName(15))
   console.log('validateEmail()', validateEmail())
   console.log('validatePassword()', validatePassword())
-  // validateName() && validateEmail()
+  
   if (validatePassword()) {
-    postCreateUser2()
+    postCreateUser()
   }
-  // postCreateUser();
 })
 
-const postCreateUser2 = () => {
+const postCreateUser = () => {
   const baseURL = 'https://ctd-todo-api.herokuapp.com/v1'
   const userObject = {
     firstName: inputName.value.toString(),
@@ -82,32 +81,6 @@ const validatePassword = () => {
 
   const isPasswordValid = isBothPasswordsEqual && isPasswordsMaxLength;
   return isPasswordValid;
-}
-
-const postCreateUser = () => {
-  const baseURL = 'https://ctd-todo-api.herokuapp.com/v1';
-
-  const userObject = {
-    firstName: inputName.value.toString(),
-    lastName: inputLastname.value.toString(),
-    email: inputEmail.value.toString(),
-    password: inputPassword[0].value.toString()
-  };
-
-  fetch(`${baseURL}/users`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(userObject)
-  })
-    .then(response => {
-      return response.json()
-    })
-    .then(({ jwt }) => {
-      localStorage.setItem('token', JSON.stringify(jwt));
-    })
-    .catch((error) => console.log(error))
 }
 
 const goToHomePage = () => {
