@@ -41,7 +41,7 @@ const postUserLogin = () => {
     })
     .then(({ jwt }) => {
       if (jwt) {
-        localStorage.setItem('token', JSON.stringify(jwt));
+        sessionStorage.setItem('token', JSON.stringify(jwt));
         goToHomePage();
       }
     })

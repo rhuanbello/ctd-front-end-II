@@ -39,7 +39,8 @@ const postCreateUser = () => {
    })
    .then(({ jwt }) => {
       if (jwt) {
-        localStorage.setItem('jwt', JSON.stringify(jwt));
+        sessionStorage.setItem('token', JSON.stringify(jwt));
+        goToHomePage();
       }
    })
    .catch(error => {
