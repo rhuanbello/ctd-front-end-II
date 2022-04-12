@@ -182,7 +182,10 @@ a {
 }
 
 .tarefa .timestamp {
-  font-size: .9em;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: .9rem;
   color: rgb(134, 134, 134);
 }
 
@@ -245,4 +248,9 @@ a {
 @keyframes trasparencia {
   0%{ opacity: 0.5;}
   100%{ opacity: 0.8;}
+}
+
+.ri-delete-bin-line {
+  color: red;
+  cursor: pointer;
 }

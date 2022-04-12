@@ -27,6 +27,8 @@ const postCreateUser = () => {
     password: inputPassword[0].value.toString()
   }
 
+  console.log('usuario criado', userObject)
+
   fetch(baseURL + '/users', {
     method: 'POST',
     headers: {
